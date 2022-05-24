@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  mynodered:
+    image: nodered/node-red
+    restart: unless-stopped
+    volumes:
+      - /
+    ports:
+      - 1880:1880
+  mybroker:
+    image: eclipse-mosquitto
+    restart: unless-stopped
+    command: mosquitto -c /mosquitto-no-auth.conf

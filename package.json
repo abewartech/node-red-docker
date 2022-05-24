@@ -1,0 +1,27 @@
+{
+  "name": "node-red-docker",
+  "version": "1.0.0",
+  "description": "all node red experiment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node $NODE_OPTIONS node_modules/node-red/red.js $FLOWS"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abewartech/node-red-docker.git"
+  },
+  "keywords": [
+    "node-red",
+    "abewartech"
+  ],
+  "author": "abewartech",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abewartech/node-red-docker/issues"
+  },
+  "homepage": "https://github.com/abewartech/node-red-docker#readme",
+  "dependencies": {
+    "node-red": "^2.2.2"
+  }
+}
