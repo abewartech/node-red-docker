@@ -1,1 +1,6 @@
 node_modules
+kafka-data/
+zookeeper-data/
+mosquitto-data/
+node-red-data/.npm
+node-red-data/.config*

@@ -1,14 +1,69 @@
-version: "3.7"
+# docker-compose.yml
+version: '3.9'
 
 services:
-  mynodered:
-    image: nodered/node-red
-    restart: unless-stopped
-    volumes:
-      - /
+  zookeeper:
+    image: bitnami/zookeeper:3.8
     ports:
-      - 1880:1880
-  mybroker:
-    image: eclipse-mosquitto
-    restart: unless-stopped
-    command: mosquitto -c /mosquitto-no-auth.conf
+      - "2181:2181"
+    volumes:
+      - zookeeper-data:/bitnami
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ZOO_LOG_LEVEL=WARN
+    networks:
+      - backend
+
+  kafka:
+    image: bitnami/kafka:3.1
+    ports:
+      - "9093:9093"
+    volumes:
+      - kafka-data:/bitnami
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=kafka-internal.io
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
+      - KAFKA_LOG_LEVEL=WARN
+    depends_on:
+      - zookeeper
+    networks:
+      - backend
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    volumes:
+      - mosquitto-data:/mosquitto/data
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    ports:
+      - "1883:1883"
+    networks:
+      - edge
+
+  node-red:
+    image: nodered/node-red:latest
+    environment:
+      - TZ=Asia/Jakarta
+    ports:
+      - "1880:1880"
+    volumes:
+      - ./node-red-data:/data
+    depends_on:
+      - kafka
+      - mosquitto
+    networks:
+      - backend
+      - edge
+
+networks:
+  backend:
+  edge:
+
+volumes:
+  mosquitto-data:
+  kafka-data:
+  zookeeper-data:
