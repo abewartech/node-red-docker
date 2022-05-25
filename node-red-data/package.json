@@ -4,6 +4,8 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
-        "kafkajs": "^2.0.1"
+        "kafkajs": "^2.0.1",
+        "node-red-contrib-cassandra-fork": "0.0.6",
+        "node-red-contrib-elasticsearch-jupalcf": "~1.1.24"
     }
 }

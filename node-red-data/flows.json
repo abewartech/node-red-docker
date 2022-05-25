@@ -42,6 +42,40 @@
         "sessionExpiry": ""
     },
     {
+        "id": "839b608480b0226d",
+        "type": "elasticsearch-config",
+        "name": "docker-elastic",
+        "server": "http://localhost:9200",
+        "timeout": "",
+        "apiVersion": "7"
+    },
+    {
+        "id": "5c2965b3f2e0df03",
+        "type": "mqtt-broker",
+        "name": "server 103",
+        "broker": "103.143.170.181",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
         "id": "c7c0605c05032967",
         "type": "mqtt in",
         "z": "9e2990e28006b0c1",
@@ -287,5 +321,128 @@
                 "1b1b1a2359d7fb77"
             ]
         ]
+    },
+    {
+        "id": "be7979ee71a9292c",
+        "type": "inject",
+        "z": "b2f9f1bd9995523e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"index\": \"myindex\"}",
+        "payloadType": "json",
+        "x": 170,
+        "y": 640,
+        "wires": [
+            [
+                "bb1a6e09da5e6370"
+            ]
+        ]
+    },
+    {
+        "id": "7091bd1a00f0389e",
+        "type": "debug",
+        "z": "b2f9f1bd9995523e",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "bb1a6e09da5e6370",
+        "type": "debug",
+        "z": "b2f9f1bd9995523e",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 410,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "1ffa4398a4636f08",
+        "type": "elasticsearch-create-index",
+        "z": "b2f9f1bd9995523e",
+        "name": "",
+        "server": "839b608480b0226d",
+        "index": "test",
+        "body": "testbody",
+        "x": 420,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2a4c358d4fa1453d",
+        "type": "inject",
+        "z": "b2f9f1bd9995523e",
+        "d": true,
+        "name": "Fake sensor data",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.5",
+        "topic": "sensor/data",
+        "payload": "{\"noise\":76.6,\"ts\":1649164799169,\"reliability\":0.7,\"lat\":45.4785374,\"lon\":9.2300135}",
+        "payloadType": "json",
+        "x": 170,
+        "y": 300,
+        "wires": [
+            [
+                "09a12c9d1e9a3ab0"
+            ]
+        ]
+    },
+    {
+        "id": "09a12c9d1e9a3ab0",
+        "type": "mqtt out",
+        "z": "b2f9f1bd9995523e",
+        "name": "",
+        "topic": "sensor/data",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5c2965b3f2e0df03",
+        "x": 430,
+        "y": 300,
+        "wires": []
     }
 ]

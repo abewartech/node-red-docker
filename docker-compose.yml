@@ -58,12 +58,62 @@ services:
     networks:
       - backend
       - edge
+      - es-net
+
+  # cassandra:
+  #   image: bitnami/cassandra:latest
+  #   ports:
+  #     - "9042:9042"
+  #   volumes:
+  #     - cassandra-data:/bitnami
+  #   environment:
+  #     - CASSANDRA_SEEDS=cassandra
+  #     - CASSANDRA_PASSWORD_SEEDER=yes
+  #     - CASSANDRA_PASSWORD=cassandra
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
+    container_name: elasticsearch
+    environment:
+      - xpack.security.enabled=false
+      - "discovery.type=single-node"
+    volumes:
+      - es3-data:/elasticsearch
+    networks:
+      - es-net
+
+  kibana:
+    image: 'docker.elastic.co/kibana/kibana:7.11.0'
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    ports:
+      - '5601:5601'
+    networks:
+      - es-net
+    depends_on:
+      - elasticsearch
+
+  headPlugin:
+    image: 'mobz/elasticsearch-head:5'
+    container_name: head
+    ports:
+      - '9100:9100'
+    networks:
+      - es-net
+    depends_on:
+      - elasticsearch
 
 networks:
   backend:
   edge:
+  es-net:
+    driver: bridge
 
 volumes:
   mosquitto-data:
   kafka-data:
   zookeeper-data:
+  es3-data:
+    # cassandra-data:
+    #   driver: local
