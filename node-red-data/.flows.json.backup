@@ -16,6 +16,14 @@
         "env": []
     },
     {
+        "id": "0fe69ee976e6e969",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "c5c14dcb012cf313",
         "type": "mqtt-broker",
         "name": "",
@@ -42,14 +50,6 @@
         "sessionExpiry": ""
     },
     {
-        "id": "839b608480b0226d",
-        "type": "elasticsearch-config",
-        "name": "docker-elastic",
-        "server": "http://localhost:9200",
-        "timeout": "",
-        "apiVersion": "7"
-    },
-    {
         "id": "5c2965b3f2e0df03",
         "type": "mqtt-broker",
         "name": "server 103",
@@ -74,6 +74,14 @@
         "willPayload": "",
         "willMsg": {},
         "sessionExpiry": ""
+    },
+    {
+        "id": "7c67f0434440a894",
+        "type": "minio-config",
+        "name": "MinIO Instance",
+        "host": "194.233.68.235",
+        "port": "9000",
+        "useSsl": false
     },
     {
         "id": "c7c0605c05032967",
@@ -384,23 +392,10 @@
         "wires": []
     },
     {
-        "id": "1ffa4398a4636f08",
-        "type": "elasticsearch-create-index",
-        "z": "b2f9f1bd9995523e",
-        "name": "",
-        "server": "839b608480b0226d",
-        "index": "test",
-        "body": "testbody",
-        "x": 420,
-        "y": 640,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "2a4c358d4fa1453d",
         "type": "inject",
         "z": "b2f9f1bd9995523e",
+        "d": true,
         "name": "Fake sensor data",
         "props": [
             {
@@ -443,5 +438,96 @@
         "x": 430,
         "y": 300,
         "wires": []
+    },
+    {
+        "id": "5bea5ea39cd034cd",
+        "type": "inject",
+        "z": "0fe69ee976e6e969",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 40,
+        "wires": [
+            [
+                "759e964655c6c1f1",
+                "e151cf187657cd66"
+            ]
+        ]
+    },
+    {
+        "id": "21776098fa371453",
+        "type": "debug",
+        "z": "0fe69ee976e6e969",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 410,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "759e964655c6c1f1",
+        "type": "buckets",
+        "z": "0fe69ee976e6e969",
+        "buckets_name": "",
+        "host": "7c67f0434440a894",
+        "buckets_operation": "listBuckets",
+        "buckets_bucket": "",
+        "buckets_region": "",
+        "buckets_prefix": "",
+        "buckets_recursive": false,
+        "buckets_start_after": "",
+        "x": 230,
+        "y": 120,
+        "wires": [
+            [
+                "21776098fa371453"
+            ],
+            [
+                "21776098fa371453"
+            ]
+        ]
+    },
+    {
+        "id": "e151cf187657cd66",
+        "type": "files",
+        "z": "0fe69ee976e6e969",
+        "files_name": "",
+        "host": "7c67f0434440a894",
+        "files_operation": "fGetObject",
+        "files_bucket": "track",
+        "files_object": "example.txt",
+        "files_filepath": "example.txt",
+        "files_metadata": "",
+        "x": 220,
+        "y": 240,
+        "wires": [
+            [
+                "21776098fa371453"
+            ],
+            [
+                "21776098fa371453"
+            ]
+        ]
     }
 ]

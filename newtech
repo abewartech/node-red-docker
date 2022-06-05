@@ -1,0 +1,17 @@
+cassandra                               https://cassandra.apache.org/_/index.html
+elasticsearch                           https://www.elastic.co/
+
+kafka                                   https://kafka.apache.org/
+
+hadoop                                  https://hadoop.apache.org/
+zookeeper                               https://zookeeper.apache.org/
+Hadoop Distributed File System (HDFS)   https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html
+Map Reduce                              https://hadoop.apache.org/docs/r1.2.1/mapred_tutorial.html
+
+Swagger                                 https://swagger.io/
+
+NSQ                                     https://nsq.io/
+
+Minio                                   https://min.io/
+
+MQTT                                    https://mqtt.org/

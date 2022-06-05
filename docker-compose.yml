@@ -2,52 +2,44 @@
 version: '3.9'
 
 services:
-  zookeeper:
-    image: bitnami/zookeeper:3.8
-    ports:
-      - "2181:2181"
-    volumes:
-      - zookeeper-data:/bitnami
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-      - ZOO_LOG_LEVEL=WARN
-    networks:
-      - backend
+  # zookeeper:
+  #   image: bitnami/zookeeper:3.8
+  #   ports:
+  #     - "2181:2181"
+  #   volumes:
+  #     - zookeeper-data:/bitnami
+  #   environment:
+  #     - ALLOW_ANONYMOUS_LOGIN=yes
+  #     - ZOO_LOG_LEVEL=WARN
+  #   networks:
+  #     - backend
 
-  kafka:
-    image: bitnami/kafka:3.1
-    ports:
-      - "9093:9093"
-    volumes:
-      - kafka-data:/bitnami
-    environment:
-      - KAFKA_ADVERTISED_HOST_NAME=kafka-internal.io
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
-      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
-      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
-      - KAFKA_LOG_LEVEL=WARN
-    depends_on:
-      - zookeeper
-    networks:
-      - backend
-
-  mosquitto:
-    image: eclipse-mosquitto:latest
-    volumes:
-      - mosquitto-data:/mosquitto/data
-      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
-    ports:
-      - "1883:1883"
-    networks:
-      - edge
+  # kafka:
+  #   image: bitnami/kafka:3.1
+  #   ports:
+  #     - "9093:9093"
+  #   volumes:
+  #     - kafka-data:/bitnami
+  #   environment:
+  #     - KAFKA_ADVERTISED_HOST_NAME=kafka-internal.io
+  #     - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+  #     - ALLOW_PLAINTEXT_LISTENER=yes
+  #     - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+  #     - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+  #     - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
+  #     - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
+  #     - KAFKA_LOG_LEVEL=WARN
+  #   depends_on:
+  #     - zookeeper
+  #   networks:
+  #     - backend
 
   node-red:
     image: nodered/node-red:latest
     environment:
       - TZ=Asia/Jakarta
+      - MINIO_SERVER_ACCESS_KEY=MaZPZLfaljp1Y4Mi
+      - MINIO_SERVER_SECRET_KEY=JjNunc7nFJbsxRFvsfZfbFHKGbc6Bs4n
     ports:
       - "1880:1880"
     volumes:
@@ -60,32 +52,32 @@ services:
       - edge
       - es-net
 
-  cassandra-node1:
-    image: bitnami/cassandra:latest
-    volumes:
-      - ./cassandra:/docker-entrypoint-initdb.d
-    environment:
-      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
-      - CASSANDRA_SEEDS=cassandra-node1,cassandra-node2,cassandra-node3
-      - CASSANDRA_PASSWORD_SEEDER=yes
-      - CASSANDRA_PASSWORD=password123
-      - CASSANDRA_DATACENTER=datacenter1
+  # cassandra-node1:
+  #   image: bitnami/cassandra:latest
+  #   volumes:
+  #     - ./cassandra:/docker-entrypoint-initdb.d
+  #   environment:
+  #     - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+  #     - CASSANDRA_SEEDS=cassandra-node1,cassandra-node2,cassandra-node3
+  #     - CASSANDRA_PASSWORD_SEEDER=yes
+  #     - CASSANDRA_PASSWORD=password123
+  #     - CASSANDRA_DATACENTER=datacenter1
 
-  cassandra-node2:
-    image: bitnami/cassandra:latest
-    environment:
-      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
-      - CASSANDRA_SEEDS=cassandra-node1,cassandra-node2,cassandra-node3
-      - CASSANDRA_PASSWORD=password123
-      - CASSANDRA_DATACENTER=datacenter1
+  # cassandra-node2:
+  #   image: bitnami/cassandra:latest
+  #   environment:
+  #     - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+  #     - CASSANDRA_SEEDS=cassandra-node1,cassandra-node2,cassandra-node3
+  #     - CASSANDRA_PASSWORD=password123
+  #     - CASSANDRA_DATACENTER=datacenter1
 
-  cassandra-node3:
-    image: bitnami/cassandra:latest
-    environment:
-      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
-      - CASSANDRA_SEEDS=cassandra-node1,cassandra-node2,cassandra-node3
-      - CASSANDRA_PASSWORD=password123
-      - CASSANDRA_DATACENTER=datacenter1
+  # cassandra-node3:
+  #   image: bitnami/cassandra:latest
+  #   environment:
+  #     - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+  #     - CASSANDRA_SEEDS=cassandra-node1,cassandra-node2,cassandra-node3
+  #     - CASSANDRA_PASSWORD=password123
+  #     - CASSANDRA_DATACENTER=datacenter1
 
   # elasticsearch:
   #   image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
@@ -120,6 +112,29 @@ services:
   #   depends_on:
   #     - elasticsearch
 
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    volumes:
+      - mosquitto-data:/mosquitto/data
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    ports:
+      - "1883:1883"
+    networks:
+      - edge
+
+  minio:
+    image: bitnami/minio:latest
+    # volumes:
+    #   - minio-data:/minio
+    environment:
+      - MINIO_ROOT_USER=appdev
+      - MINIO_ROOT_PASSWORD=@appDEV1234!!!!
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - es-net
+
 networks:
   backend:
   edge:
@@ -128,8 +143,9 @@ networks:
 
 volumes:
   mosquitto-data:
-  kafka-data:
-  zookeeper-data:
-  es3-data:
+  # minio-data:
+  # kafka-data:
+  # zookeeper-data:
+  # es3-data:
     # cassandra-data:
     #   driver: local
