@@ -123,7 +123,7 @@ services:
       - edge
 
   minio:
-    image: bitnami/minio:latest
+    image: soldevelo/minio:latest
     # volumes:
     #   - minio-data:/minio
     environment:
